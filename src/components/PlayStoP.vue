@@ -2,8 +2,8 @@
 
 const props = defineProps({
   start:{
-    type: Number,
-    default: 1
+    type: Boolean,
+    default: false
   }
 })
 
@@ -11,7 +11,7 @@ const props = defineProps({
 
 <template>
   <button type="button" name="button">
-    <span v-if="start === 1">Stop</span>
+    <span v-if="start">StopTtttt</span>
     <span v-else>Start</span>
   </button>
 </template>
