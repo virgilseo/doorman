@@ -13,7 +13,7 @@ const autoPanner = new Tone.AutoPanner(`${freq.value}`).toDestination()
 const oscillator = new Tone.Oscillator().connect(autoPanner)
 
 let playing = false
-const start = ref(0)
+const start = ref(false)
 
 defineExpose({
   playing,
@@ -28,11 +28,11 @@ const toggglePlay = () => {
   if (playing === true) {
     autoPanner.start();
     oscillator.start()
-    start.value = 1
+    start.value = true
   } else {
     // route an oscillator through the panner and stopt it
     oscillator.stop();
-    start.value = 0
+    start.value = false
   }
 }
 // Watch the the freq var and update the autopanner freq on user input

@@ -1,18 +1,15 @@
 <script setup>
 
-const props = defineProps({
-  start:{
-    type: Boolean,
-    default: false
-  }
+defineProps({
+  start: Boolean
 })
 
 </script>
 
 <template>
   <button type="button" name="button">
-    <span v-if="start">StopTtttt</span>
-    <span v-else>Start</span>
+    <span v-if="start">Stop</span>
+    <span v-else>Play</span>
   </button>
 </template>
 
