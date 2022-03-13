@@ -5,8 +5,8 @@ import LfoEffects from './components/LfoEffects.vue'
 </script>
 
 <template>
-  <img alt="Vue logo" src="./assets/logo.png" />
-  <LfoEffects msg="Tone.js - Test[0]" />
+  <img alt="Vue logo" class="logo" src="./assets/logo.png" />
+  <LfoEffects msg="DOORMAN.[tone.js] | LFO Effects | Test[1]" />
 </template>
 
 <style>
@@ -17,5 +17,8 @@ import LfoEffects from './components/LfoEffects.vue'
   text-align: center;
   color: #2c3e50;
   margin-top: 60px;
+}
+.logo {
+  width: 5%;
 }
 </style>
