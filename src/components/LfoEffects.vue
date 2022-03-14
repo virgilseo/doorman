@@ -43,6 +43,7 @@ const playPanner = () => {
   // create an autopanner and start it
   if (start.value === false) {
     autoPanner.start();
+    console.log(autoPanner)
     pannerOscillator.start()
     start.value = true
   } else {
@@ -67,7 +68,7 @@ const playFilter = (effect, osc ) => {
 // Start Tremolo
 const playTremolo = () => {
   // create an autoFileter and start it
-  if (tremeloStart.value === false) {
+  if (!tremeloStart.value) {
     tremolo.start();
     tremoloOsc.start()
     tremeloStart.value = true
