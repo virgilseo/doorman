@@ -15,11 +15,14 @@ const tremoloFreq = ref(4)
 // Panner
 const autoPanner = new Tone.AutoPanner(`${freq.value}`).toDestination()
 
-autoPanner.set({
- depth: `${0.8}`
-})
+const reverb = new Tone.JCReverb(0.1).toDestination();
+const chorus = new Tone.Chorus(4, 2.5, 0.3).toDestination()
 
 const pannerOscillator = new Tone.Oscillator().connect(autoPanner)
+
+pannerOscillator.set({
+  type: 'sine8'
+})
 
 // Filter
 // create an autofilter and start it's LFO
@@ -81,19 +84,22 @@ const playTremolo = () => {
 // Watch the the freq var and update the autopanner freq on user input
 watch(freq, (newVal) => {
     autoPanner.set({
-     frequency: `${newVal}`
+     frequency: `${newVal}`,
+     depth: `${newVal / 15}`
    })
 })
 // Update the FIlter freq on user input
 watch(filterFreq, (newVal) => {
     autoFilter.set({
-     frequency: `${newVal}`
+     frequency: `${newVal}`,
+     depth: `${newVal / 14}`
    })
 })
 // Update the FIlter freq on user input
 watch(tremoloFreq, (newVal) => {
     tremolo.set({
-     frequency: `${newVal}`
+     frequency: `${newVal}`,
+     depth: `${newVal / 14}`
    })
 })
 </script>
@@ -102,13 +108,13 @@ watch(tremoloFreq, (newVal) => {
   <h2>{{ msg }}</h2>
   <section>
     <h4>Panner</h4>
-    <p>{{ freq }} hz</p>
+    <p><span class="freq">{{ freq }}</span> hz</p>
     <Slider
       :lazy="false"
       v-model="freq"
       :min="1"
-      :max="14"
-      :step="0.01"
+      :max="15"
+      :step="0.02"
       class="slider"
       :value="freq"
       />
@@ -116,7 +122,7 @@ watch(tremoloFreq, (newVal) => {
   </section>
   <section>
     <h4>Filter:noise</h4>
-    <p>{{ filterFreq }} hz</p>
+    <p><span class="freq">{{ filterFreq }}</span>hz</p>
     <Slider
       :lazy="false"
       v-model="filterFreq"
@@ -130,7 +136,7 @@ watch(tremoloFreq, (newVal) => {
   </section>
   <section>
     <h4>Tremolo</h4>
-    <p>{{ tremoloFreq }} hz</p>
+    <p><span class="freq">{{ tremoloFreq }} </span>hz</p>
     <Slider
       :lazy="false"
       v-model="tremoloFreq"
@@ -158,6 +164,13 @@ h4 {
   width: 30%;
   margin-left: auto;
   margin-right: auto;
+}
+
+.freq {
+  width: 45px;
+  text-align: center;
+  display: inline-block;
+  font-weight: 600;
 }
 </style>
 
