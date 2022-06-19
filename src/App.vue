@@ -1,14 +1,13 @@
 <script setup>
 // This starter template is using Vue 3 <script setup> SFCs
 // Check out https://v3.vuejs.org/api/sfc-script-setup.html#sfc-script-setup
-import LfoEffects from './components/LfoEffects.vue'
+import LfoEffects from './components/LfoEffects/LfoEffects.vue'
 import { onMounted } from 'vue'
 import * as Tone from 'tone'
 
 // Resume tone context on app mount to prevent auto play console warning
 onMounted(() => {
   Tone.context.resume()
-  console.log('mounted')
 })
 </script>
 
