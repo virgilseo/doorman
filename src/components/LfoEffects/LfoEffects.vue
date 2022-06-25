@@ -1,35 +1,25 @@
 <script setup>
-import { ref, reactive, watch , computed} from 'vue'
-import * as Tone from 'tone'
-import Slider from '@vueform/slider'
-import PlayStop from '../Reusable/PlayStop.vue'
+import { reactive } from 'vue'
 import effects from './Effects.js'
+import Effect from './Effect.vue'
 
 defineProps({
   msg: String
 })
 
 const lfoEffects = reactive(effects)
-const pannerFreq = computed(() => {
-  return lfoEffects[0].freq
-})
-const filterFreq = computed(() => {
-  return lfoEffects[1].freq
-})
-const tremeloFreq = computed(() => {
-  return lfoEffects[2].freq
-})
 
 const playEffect = (name) => {
   effects.filter((eff) => {
     return eff.name === name
   }).map((ef) => {
     if (!ef.playing) {
-      ef.effect.start()
+      ef.effect.type = ef.wave
+      ef.effect.connect(ef.limiter).start()
       ef.osc.connect(ef.effect).start()
       tooglePlay(ef.name)
     } else {
-      ef.osc.connect(ef.effect).stop()
+      ef.osc.stop()
       tooglePlay(ef.name)
     }
   })
@@ -43,65 +33,34 @@ const tooglePlay = (name) => {
   })
 }
 
-// Watch frequencys and update the filters
-
-watch(pannerFreq, (newVal) => {
-     lfoEffects.filter((ef) => {
-       return ef.name === 'Panner'
-     }).map((ef) => {
-       ef.effect.set({
-         frequency: `${newVal}`,
-         depth: `${newVal / 16}`
-       })
-     })
-})
-
-watch(filterFreq, (newVal) => {
-     lfoEffects.filter((ef) => {
-       return ef.name === 'Filter'
-     }).map((ef) => {
-       ef.effect.set({
-         frequency: `${newVal}`,
-         depth: `${newVal / 16}`
-       })
-     })
-})
-
-watch(tremeloFreq, (newVal) => {
-     lfoEffects.filter((ef) => {
-       return ef.name === 'Tremelo'
-     }).map((ef) => {
-       ef.effect.set({
-         frequency: `${newVal}`,
-         depth: `${newVal / 16}`
-       })
-     })
-})
+const setFreq = (newVal, name) => {
+  lfoEffects.filter((ef) => {
+    return ef.name === name
+  }).map((ef) => {
+    ef.effect.set({
+      frequency: `${newVal}`,
+      depth: `${newVal / ef.max}`
+    })
+  })
+}
 </script>
 
 <template>
   <div class="">
     <h2>{{ msg }}</h2>
     <ul class="list">
-      <li v-for="effect in lfoEffects"  :key="effect.name">
-        <h4>{{ effect.name }}</h4>
-        <p><span class="freq">{{ effect.freq }} </span>hz</p>
-        <Slider
-          :lazy="false"
-          v-model="effect.freq"
-          :min="effect.min"
-          :max="effect.max"
-          :step="0.01"
-          class="slider"
-          :value="effect.freq"
-          />
-        <PlayStop @click="playEffect(effect.name)" :start="effect.playing" />
-      </li>
+      <Effect
+        v-for="effect in lfoEffects"
+        :key="effect.name"
+        :effect="effect"
+        :play="playEffect"
+        :setFreq="setFreq"
+        />
     </ul>
   </div>
 </template>
 
-<style scoped>
+<style type="css">
 a {
   color: #42b983;
 }
