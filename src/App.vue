@@ -8,6 +8,7 @@ import * as Tone from 'tone'
 // Resume tone context on app mount to prevent auto play console warning
 onMounted(() => {
   Tone.context.resume()
+  console.log('test-pull')
 })
 </script>
 
