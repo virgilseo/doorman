@@ -1,94 +1,103 @@
-<script setup>
-import { reactive } from 'vue'
-import effects from './Effects.js'
+<script lang="ts" setup>
+import { reactive, ref } from 'vue'
+import effects from './Effects.ts'
 import Effect from './Effect.vue'
+import * as Tone from 'tone'
+import { LfoEffect } from '../../types/types.ts'
 
 defineProps({
   msg: String
 })
 
-const lfoEffects = reactive(effects)
+const lfoEffects = reactive([...effects]) as LfoEffect[]
 
-const playEffect = (name) => {
-  effects.filter((eff) => {
-    return eff.name === name
-  }).map((ef) => {
-    if (!ef.playing) {
-      ef.effect.type = ef.wave
-      ef.effect.connect(ef.limiter).start()
-      ef.osc.connect(ef.effect).start()
-      tooglePlay(ef.name)
-    } else {
-      ef.osc.stop()
-      tooglePlay(ef.name)
-    }
+const playEffect = async (name: string) => {
+  await Tone.start()
+  
+  effects
+    .filter((eff) => eff.name === name)
+    .map((ef) => {
+      if (!ef.playing) {
+        ef.effect.toDestination().start()
+        ef.osc.connect(ef.effect)
+        ef.osc.start()
+        togglePlay(ef.name)
+      } else {
+        ef.osc.stop()
+        togglePlay(ef.name)
+      }
   })
 }
 
-const tooglePlay = (name) => {
-  lfoEffects.filter((eff) => {
-    return eff.name === name
-  }).map((eff) => {
-    !eff.playing ? eff.playing = true : eff.playing = false
+const togglePlay = (name: string) => {
+  lfoEffects
+    .filter((eff) => eff.name === name)
+    .map((eff) => {
+    eff.playing = !eff.playing
   })
 }
 
-const setFreq = (newVal, name) => {
-  lfoEffects.filter((ef) => {
-    return ef.name === name
-  }).map((ef) => {
-    ef.effect.set({
-      frequency: `${newVal}`,
-      depth: `${newVal / ef.max}`
-    })
+const setFreq = (newVal: number, name: string) => {
+  lfoEffects
+    .find((ef) => ef.name === name)
+    ?.effect.set({
+      frequency: newVal,
   })
 }
+
 </script>
 
 <template>
-  <div class="">
+  <div class="container">
     <h2>{{ msg }}</h2>
     <ul class="list">
       <Effect
         v-for="effect in lfoEffects"
         :key="effect.name"
         :effect="effect"
-        :play="playEffect"
-        :setFreq="setFreq"
-        />
+        @set-play="playEffect"
+        @set-frequency="setFreq"
+      />
     </ul>
   </div>
 </template>
 
-<style type="css">
-a {
-  color: #42b983;
-}
+<style type="css" scoped>
 
-h4 {
-  width: 30%;
-  margin-left: auto;
-  margin-right: auto;
-  text-align: left;
-}
-.slider {
-  width: 30%;
-  margin-left: auto;
-  margin-right: auto;
-}
+  .container {
+    width: 90%;
+    margin: 0 auto;
+  }
 
-.freq {
-  width: 45px;
-  text-align: center;
-  display: inline-block;
-  font-weight: 600;
-}
+  @media screen and (min-width: 768px) {
+    .container {
+      width: 60%;
+    }
+    
+  }
 
-.list {
-  list-style: none;
-  margin: 0;
-  padding: 0;
-}
+  @media screen and (min-width: 1200px) {
+    .container {
+      width: 30%;
+    }
+    
+  }
+
+  a {
+    color: #42b983;
+  }
+
+  h4 {
+    text-align: left;
+  }
+
+  .list {
+    list-style: none;
+    margin: 0;
+    padding: 0;
+    padding-bottom: 10%;
+  }
+
 </style>
 
 <style src="@vueform/slider/themes/default.css"></style>

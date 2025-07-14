@@ -1,37 +1,43 @@
-<script setup>
+<script setup lang="ts">
 import Slider from '@vueform/slider'
 import PlayStop from '../Reusable/PlayStop.vue'
-import { watch , computed, reactive} from 'vue'
+import  { LfoEffect } from '../../types/types.ts'
 
-const props = defineProps({
-  effect: Object,
-  play: Function,
-  setFreq: Function
-})
+const { effect } = defineProps<{ effect: LfoEffect }>()
+const { name,  min, max, freq } = effect
 
-const freq = computed(() => {
-  return props.effect.freq
-})
-
-watch(freq, (newVal) => {
-  props.setFreq(newVal, props.effect.name)
-})
 
 </script>
 
 <template>
   <li>
-    <h4>{{ effect.name }}</h4>
-    <p><span class="freq">{{ effect.freq }} </span>hz</p>
+    <h4 class="title">{{ name }}</h4>
     <Slider
       :lazy="false"
-      v-model="effect.freq"
-      :min="effect.min"
-      :max="effect.max"
+      v-model="freq"
+      :min="min"
+      :max="max"
       :step="0.02"
       class="slider"
-      :value="effect.freq"
+      :value="`${freq} hz`"
+      @update="$emit('set-frequency', freq, name)"
       />
-    <PlayStop @click="play(effect.name)" :start="effect.playing" />
+    <PlayStop @click="$emit('set-play', name)" :isPlaying="effect.playing" />
   </li>
 </template>
+
+<style type="css" scoped>
+
+  .title {
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-bottom: 64px;
+    text-align: left;
+  }
+
+  li {
+    margin-bottom: 64px;
+  }
+
+
+</style>
