@@ -11,24 +11,21 @@ import LfoEffects from './components/LfoEffects/LfoEffects.vue'
   font-family: Vanir, Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
-  color: #2c3e50;
+  color: #1c0e00;
+  height: inherit;
+  width: inherit;
 }
 
-html,
-body,
-#app {
+body {
   display: flex;
-  width: 100%;
   height: 100%;
+  width: 100%;
   margin: 0;
   padding: 0;
+  background-color: #1c0e0040;
 }
 
 * {
   box-sizing: border-box;
-}
-
-.logo {
-  width: 5%;
 }
 </style>

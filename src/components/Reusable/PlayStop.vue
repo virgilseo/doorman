@@ -13,20 +13,23 @@ defineProps({
 
 <style scoped>
 button {
-  color: white;
-  background-color: #42b983;
+  color: #1c0e00;
+  background-color: #ffa500;
   padding: 4px;
-  border-radius: 3px;
+  border-radius: 100px;
   margin-top: 20px;
   cursor: pointer;
   font-weight: 600;
   border: none;
-  width: 100%;
+  height: 32px;
+  width: 32px;
+  justify-content: center;
+  align-items: center;
 }
 
 button:hover {
-  background-color: #5dc596;
   transition: 0.5s ease-in;
   transition: 0.8s ease-out;
+  color: #6b4300;
 }
 </style>

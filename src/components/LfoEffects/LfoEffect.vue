@@ -1,7 +1,7 @@
 <script lang="ts" setup>
 import Slider from '@vueform/slider'
 import PlayStop from '../Reusable/PlayStop.vue'
-import { LfoEffect } from '../../types/types.ts'
+import type { LfoEffect } from '../../types/types'
 
 const { effect } = defineProps<{ effect: LfoEffect }>()
 const { name, min, max, freq } = effect
@@ -18,8 +18,8 @@ defineEmits(['set-frequency', 'set-play'])
       :min="min"
       :max="max"
       :step="0.02"
-      class="slider"
       :value="`${freq} hz`"
+      class="slider"
       @update="$emit('set-frequency', freq, name)"
     />
     <PlayStop :is-playing="effect.playing" @click="$emit('set-play', name)" />
@@ -36,5 +36,14 @@ defineEmits(['set-frequency', 'set-play'])
 
 li {
   margin-bottom: 64px;
+}
+
+.slider {
+  --slider-connect-bg: #ffa500;
+  --slider-tooltip-bg: #1c0e00;
+  --slider-handle-ring-color: #3b82f630;
+  --slider-bg: #6b430040;
+  --slider-handle-bg: #1c0e00;
+  --slider-tooltip-color: #ffa500;
 }
 </style>

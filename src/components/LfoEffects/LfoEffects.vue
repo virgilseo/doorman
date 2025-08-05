@@ -1,9 +1,9 @@
 <script lang="ts" setup>
 import { reactive } from 'vue'
-import effects from './Effects.ts'
+import effects from './Effects'
 import Effect from './LfoEffect.vue'
 import * as Tone from 'tone'
-import { LfoEffect } from '../../types/types.ts'
+import type { LfoEffect } from '../../types/types'
 
 defineProps<{ msg: string }>()
 
@@ -63,6 +63,7 @@ const setFreq = (newVal: number, name: string) => {
 .container {
   width: 90%;
   margin: 0 auto;
+  height: 80vh;
 }
 
 @media screen and (min-width: 768px) {
@@ -73,7 +74,7 @@ const setFreq = (newVal: number, name: string) => {
 
 @media screen and (min-width: 1200px) {
   .container {
-    width: 30%;
+    width: 50%;
   }
 }
 
@@ -81,15 +82,16 @@ a {
   color: #42b983;
 }
 
-h4 {
-  text-align: left;
+h2 {
+  text-align: center;
+  padding: 40px 0;
 }
 
 .list {
   list-style: none;
   margin: 0;
   padding: 0;
-  padding-bottom: 10%;
+  /* padding-bottom: 10%; */
 }
 </style>
 
