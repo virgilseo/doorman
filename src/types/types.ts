@@ -5,7 +5,7 @@ export type LfoEffect = {
   playing: boolean
   freq: number
   osc: Tone.Oscillator
-  effect: Tone.AutoPanner | Tone.Panner | Tone.Tremolo
+  effect: Tone.AutoPanner | Tone.AutoFilter | Tone.Tremolo
   limiter: Tone.Limiter
   min: number
   max: number
