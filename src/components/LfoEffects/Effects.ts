@@ -1,6 +1,6 @@
 import * as Tone from 'tone'
 
-const effects = [
+export const effects = [
   {
     name: 'Panner',
     effect: new Tone.AutoPanner({
@@ -8,7 +8,6 @@ const effects = [
       depth: 0.6,
     }),
     freq: 4,
-    playing: false,
     min: 1,
     max: 15,
     osc: new Tone.Oscillator({
@@ -25,7 +24,6 @@ const effects = [
       depth: 1,
     }),
     freq: 4,
-    playing: false,
     min: 1,
     max: 20,
     osc: new Tone.Oscillator({
@@ -42,7 +40,7 @@ const effects = [
       depth: 1,
     }),
     freq: 4,
-    playing: false,
+
     min: 1,
     max: 10,
     osc: new Tone.Oscillator({
@@ -53,5 +51,3 @@ const effects = [
     limiter: new Tone.Limiter(-20),
   },
 ]
-
-export default effects

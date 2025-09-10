@@ -1,42 +1,28 @@
 <script lang="ts" setup>
-import { reactive } from 'vue'
-import effects from './Effects'
+import { effects } from './Effects'
 import Effect from './LfoEffect.vue'
 import * as Tone from 'tone'
-import type { LfoEffect } from '../../types/types'
 
 defineProps<{ msg: string }>()
 
-const lfoEffects = reactive([...effects]) as LfoEffect[]
-
-const playEffect = async (name: string) => {
+const playEffect = async (name: string, isPlaying: boolean) => {
   await Tone.start()
 
   effects
     .filter((eff) => eff.name === name)
     .map((ef) => {
-      if (!ef.playing) {
+      if (isPlaying) {
         ef.effect.toDestination().start()
         ef.osc.connect(ef.effect)
         ef.osc.start()
-        togglePlay(ef.name)
       } else {
         ef.osc.stop()
-        togglePlay(ef.name)
       }
     })
 }
 
-const togglePlay = (name: string) => {
-  lfoEffects
-    .filter((eff) => eff.name === name)
-    .map((eff) => {
-      eff.playing = !eff.playing
-    })
-}
-
-const setFreq = (newVal: number, name: string) => {
-  lfoEffects
+const setFreq = (name: string, newVal: number) => {
+  effects
     .find((ef) => ef.name === name)
     ?.effect.set({
       frequency: newVal,
@@ -49,7 +35,7 @@ const setFreq = (newVal: number, name: string) => {
     <h2>{{ msg }}</h2>
     <ul class="list">
       <Effect
-        v-for="effect in lfoEffects"
+        v-for="effect in effects"
         :key="effect.name"
         :effect="effect"
         @set-play="playEffect"

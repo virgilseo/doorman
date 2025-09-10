@@ -2,11 +2,18 @@
 import Slider from '@vueform/slider'
 import PlayStop from '../Reusable/PlayStop.vue'
 import type { LfoEffect } from '../../types/types'
+import { ref } from 'vue'
 
 const { effect } = defineProps<{ effect: LfoEffect }>()
 const { name, min, max, freq } = effect
+const isPlaying = ref(false)
 
-defineEmits(['set-frequency', 'set-play'])
+const emit = defineEmits(['set-frequency', 'set-play'])
+
+const togglePlay = () => {
+  isPlaying.value = !isPlaying.value
+  emit('set-play', name, isPlaying.value)
+}
 </script>
 
 <template>
@@ -20,9 +27,9 @@ defineEmits(['set-frequency', 'set-play'])
       :step="0.02"
       :value="`${freq} hz`"
       class="slider"
-      @update="$emit('set-frequency', freq, name)"
+      @update="$emit('set-frequency', name, freq)"
     />
-    <PlayStop :is-playing="effect.playing" @click="$emit('set-play', name)" />
+    <PlayStop :is-playing="isPlaying" @toggle-click="togglePlay" />
   </li>
 </template>
 

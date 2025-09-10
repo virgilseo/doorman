@@ -1,11 +1,11 @@
 <script setup lang="ts">
-defineProps({
-  isPlaying: Boolean,
-})
+defineProps<{ isPlaying: boolean }>()
+
+defineEmits(['toggle-click'])
 </script>
 
 <template>
-  <button type="button" name="button">
+  <button type="button" name="button" @click="$emit('toggle-click')">
     <span v-if="!isPlaying" class="material-icons">play_arrow</span>
     <span v-else class="material-icons">stop</span>
   </button>
