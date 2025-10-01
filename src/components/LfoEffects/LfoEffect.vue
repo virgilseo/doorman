@@ -8,7 +8,7 @@ const { effect } = defineProps<{ effect: LfoEffect }>()
 const { name, min, max, freq } = effect
 const isPlaying = ref(false)
 
-const emit = defineEmits(['set-frequency', 'set-play'])
+const emit = defineEmits(['set-frequency', 'update-frequency', 'set-play'])
 
 const togglePlay = () => {
   isPlaying.value = !isPlaying.value
@@ -27,7 +27,8 @@ const togglePlay = () => {
       :step="0.02"
       :value="`${freq} hz`"
       class="slider"
-      @update="$emit('set-frequency', name, freq)"
+      @update="emit('set-frequency', name, freq)"
+      @end="emit('update-frequency', name, freq)"
     />
     <PlayStop :is-playing="isPlaying" @toggle-click="togglePlay" />
   </li>

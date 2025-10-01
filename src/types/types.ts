@@ -8,4 +8,10 @@ export type LfoEffect = {
   limiter: Tone.Limiter
   min: number
   max: number
+  // isPlaying: boolean
+}
+
+export type storedSettings = {
+  name: string
+  freq: number | null
 }

@@ -1,17 +1,20 @@
 <script lang="ts" setup>
-import { effects } from './Effects'
+import { useLfoEffectsStore } from '../../stores/lfoEffectsStore'
 import Effect from './LfoEffect.vue'
 import * as Tone from 'tone'
 
 defineProps<{ msg: string }>()
 
+const { getEffects, signalSettings } = useLfoEffectsStore()
+
 const playEffect = async (name: string, isPlaying: boolean) => {
   await Tone.start()
 
-  effects
+  getEffects
     .filter((eff) => eff.name === name)
     .map((ef) => {
       if (isPlaying) {
+        ef.effect.frequency.value = ef.freq
         ef.effect.toDestination().start()
         ef.osc.connect(ef.effect)
         ef.osc.start()
@@ -22,7 +25,7 @@ const playEffect = async (name: string, isPlaying: boolean) => {
 }
 
 const setFreq = (name: string, newVal: number) => {
-  effects
+  getEffects
     .find((ef) => ef.name === name)
     ?.effect.set({
       frequency: newVal,
@@ -35,11 +38,12 @@ const setFreq = (name: string, newVal: number) => {
     <h2>{{ msg }}</h2>
     <ul class="list">
       <Effect
-        v-for="effect in effects"
+        v-for="effect in getEffects"
         :key="effect.name"
         :effect="effect"
         @set-play="playEffect"
         @set-frequency="setFreq"
+        @update-frequency="signalSettings"
       />
     </ul>
   </div>
